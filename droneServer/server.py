@@ -2,6 +2,9 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import SocketServer
 import json
 
+feet = 6;
+inches = (feet + 2) * 12;
+
 class S(BaseHTTPRequestHandler):
     def _set_headers(self):
         self.send_response(200)
@@ -9,7 +12,8 @@ class S(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
-        data = { "target": False, "distance": 50 }
+        data = { "target": False, "distance": inches };
+        print data;
         self._set_headers()
         self.wfile.write(json.dumps(data))
 

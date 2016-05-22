@@ -8,7 +8,7 @@ import numpy as np
 
 
 
-IMAGE_PATHS =  "C:/Users/Aide/Documents/GitHub/angelhack-washingtondc-2016/distance-to-camera/calibrate6.jpg"
+IMAGE_PATHS =  "./test_images/calibrate.jpg"
 
 
 inches = 0
@@ -19,13 +19,13 @@ def find_marker(image):
     blurred = cv2.GaussianBlur(color, (5, 5), 0)
     edged = cv2.Canny(blurred, 35, 125)
     return edged
-    
+
     # compute the bounding box of the of the paper region and return it
     #return cv2.minAreaRect(c)
 
 def distance_to_camera(w):
    # compute and return the distance from the maker to the camera
-    
+
         constant = 114
 ##        print w
 ##        print "pixel"
@@ -43,11 +43,11 @@ def getData():
    # (grabbed, image) = camera.read()
     edged = find_marker(image)
     status = "No Targets"
-    
+
     # find contours in the edge map
     (cnts, _) = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL,
     cv2.CHAIN_APPROX_SIMPLE)
-    
+
     #loop over the contours
     for c in cnts:
 ##                if x == 2:
@@ -57,7 +57,7 @@ def getData():
         approx = cv2.approxPolyDP(c, 0.01 * peri, True)
 
         #ensure that the approximated conture is square
-        if len(approx) >=4 and len(approx) <=6:            
+        if len(approx) >=4 and len(approx) <=6:
             #use bonding box
             (x, y, w, h) = cv2.boundingRect(approx)
             aspectRatio = w / float (h)
@@ -108,14 +108,14 @@ print hello
 ##                    cv2.line(image, (startX, cY), (endX, cY), (0, 0, 255), 3)
 ##                    cv2.line(image, (cX, startY), (cX, endY), (0, 0, 255), 3)
 
-             
+
 ##            # draw the status text on the frame
 ##            cv2.putText(frame,   status, (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
 ##                    (0, 0, 255), 2)
 ##        cv2.putText(image, "%.2fin" % inches,
 ##                (image.shape[1] - 200, image.shape[0] - 20), cv2.FONT_HERSHEY_SIMPLEX,
 ##                2.0, (0, 255, 0), 3)
-##        
+##
         # show the frame and record if a key is pressed
 ##        cv2.imshow("Frame", image)
 ##        key = cv2.waitKey(1) & 0xFF

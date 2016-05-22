@@ -16,9 +16,9 @@
 */
 
 var SETTINGS = {
-    speed: 0.025,
+    speed: 0.05,
     rotateCoefficient: 100,
-    speedCoefficient: 1000,
+    speedCoefficient: 600,
     height: undefined,
     startingPosition: {
         x: 0,
@@ -31,6 +31,22 @@ var SETTINGS = {
 
 // Requires
 var http = require('http');
+
+var getDistance = function(callback) {
+    http.get({
+        hostname: 'localhost',
+        port: 8000,
+        path: '/',
+        agent: false // create a new agent just for this one request
+    }, function(res) {
+        // Do stuff with response
+        res.setEncoding('utf8');
+        res.on('data', function(body) {
+            var data = JSON.parse(body);
+            callback(data);
+        });
+    });
+};
 
 var cv = require('opencv');
 var arDrone = require('ar-drone');
@@ -48,6 +64,7 @@ var Drone = function() {
 
 Drone.prototype.takeoff = function() {
     DRONE.after(1000, function() {
+            console.log('taking off');
             this.takeoff();
         })
         .after(4000, function() {});
@@ -55,6 +72,7 @@ Drone.prototype.takeoff = function() {
 
 Drone.prototype.land = function() {
     DRONE.after(2000, function() {
+        console.log('landing');
         this.stop();
         this.land();
     });
@@ -81,6 +99,11 @@ Drone.prototype.travel = function(feet) {
     var distance = SETTINGS.speedCoefficient * feet;
     DRONE.after(0, function() {
             this.front(SETTINGS.speed);
+            getDistance(function(data) {
+                console.log(data);
+            });
+            console.log('moving foward');
+            console.log('going forward ' + feet.toString() + ' ft');
         })
         .after(distance, function() {
             this.stop();
@@ -88,10 +111,13 @@ Drone.prototype.travel = function(feet) {
 };
 
 Drone.prototype.goto = function() {
-    this.getDistance(function(data) {
-        var feet = data.distance / 12;
-        feet = feet - 2;
-        DRONE.travel(feet);
+    DRONE.after(0, function() {
+        getDistance(function(data) {
+            var feet = data.distance / 12;
+            feet = feet - 2;
+            console.log('going forward ' + feet.toString() + ' ft');
+            drone.travel(feet);
+        });
     });
 };
 
@@ -118,22 +144,6 @@ Drone.prototype.stream = function() {
     });
 };
 
-Drone.prototype.getDistance = function(callback) {
-    http.get({
-        hostname: 'localhost',
-        port: 3000,
-        path: '/',
-        agent: false // create a new agent just for this one request
-    }, function(res) {
-        // Do stuff with response
-        res.setEncoding('utf8');
-        res.on('data', function(body) {
-            var data = JSON.parse(body);
-            callback(data);
-        });
-    });
-};
-
 Drone.prototype.wait = function(time) {
     DRONE.after(time, function() {});
 };
@@ -142,5 +152,5 @@ var drone = new Drone();
 drone.stream();
 drone.wait(5000);
 drone.takeoff();
-drone.travel(8);
+drone.travel(6);
 drone.land();
