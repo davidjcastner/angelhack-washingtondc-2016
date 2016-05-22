@@ -1,0 +1,44 @@
+
+
+var find_marker = function (image){
+  //convert the image to the grayscale, blur it, and detect edges
+  color = cv.cvtColor(image, cv2.COLOR_BGR2GRAY)
+  gray = image.ConvertGaryScale()
+  edge = gray.canny(5,300)
+  return edge;
+}
+
+//function that calculates the distance bewteen drone and tag
+var distance_to_drone = function (width){
+  var  constant = 114;
+  var  inches = (4.75*(width/100));
+  var  distance = constant / inches;
+    return distance;
+}
+
+var x = distance_to_drone(width);
+console.log(x);
+
+var contour = function(){
+  var contours = im.findContours();
+// Count of contours in the Contours object
+  contours.size();
+// Count of corners(verticies) of contour `index`
+  contours.cornerCount(index);
+
+  // Access vertex data of contours
+  for(var c = 0; c < contours.size(); ++c) {
+    console.log("Contour " + c);
+    for(var i = 0; i < contours.cornerCount(c); ++i) {
+      var point = contours.point(c, i);
+      console.log("(" + point.x + "," + point.y + ")");
+    }
+  }
+// Computations of contour `index`
+contours.area(index);
+contours.arcLength(index, isClosed);
+contours.boundingRect(index);
+contours.minAreaRect(index);
+contours.isConvex(index);
+contours.fitEllipse(index);
+}
