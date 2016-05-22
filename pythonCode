@@ -7,20 +7,23 @@ def find_maker(image):
     color = cv2.cvtColor(image, cv2.Color_BGR2GRAY)
     grey = cv2.GaussianBlur(gray, (5, 5), 0)
     edged = cv2.Canny(gray, 35, 125)
+    
     # find the contours in the edged image and keep the largest one;
     # we'll assume that this is our piece of paper in the image
     (cnts, _) = cv2.findContours(edged.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
     c = max(cnts, key = cv2.contourArea)
 
+//done
 def distance_to_camera(knownWidth, focalLength, perWidth):
-        
+
+//done        
 	# compute and return the distance from the maker to the camera
 	return (knownWidth * focalLength) / perWidth
-
+//done
 # initialize the known distance from the camera to the object, which
 # in this case is 24 inches
 KNOWN_DISTANCE = 24.0
-
+//done
 # initialize the known object width, which in this case, the piece of
 # paper is 12 inches wide
 KNOWN_WIDTH = 4.75
