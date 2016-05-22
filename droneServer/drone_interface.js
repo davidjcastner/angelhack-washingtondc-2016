@@ -27,6 +27,7 @@ var DRONE_POSITION = {
     ori: 0 // orientation 0-360
 };
 
+// queue for executing drone commands
 var DroneQueue = [];
 
 var drone_startUp = function() {

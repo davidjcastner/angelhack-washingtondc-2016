@@ -2,7 +2,7 @@ var cv = require('opencv');
 var arDrone = require('ar-drone');
 var client = arDrone.createClient();
 
-var tempImage = './out.jpg';
+var tempImage = './test_images/out.jpg';
 
 var startVideoCapture = function() {
     var s = new cv.ImageStream();
@@ -102,4 +102,4 @@ var detectShapes = function() {
 startVideoCapture();
 //setInterval(detectShapes, 1000);
 //detectShapes();
-setTimeout(saveImage, 2000, './calibrate.png');
+setTimeout(saveImage, 2000, './test_images/calibrate.jpg');
